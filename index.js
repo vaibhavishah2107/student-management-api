@@ -5,16 +5,17 @@ mongoose.connect("mongodb://localhost:27017/studentDB")
 .then(()=>{
     console.log("MongoDB conneccted successfully")
 })
-.catch(()=>{
-    console.log(err);
+.catch((error)=>{
+    console.log(error);
 });
 app.use(express.json());      // FIRST
 
 const studentRoutes = require("./routes/studentRoutes");
 const teacherRoutes = require("./routes/teacherRoutes");
-
+const authRoutes = require("./routes/authRoute");
 app.use(studentRoutes);        // THEN routes
 app.use(teacherRoutes);
+app.use(authRoutes);
 
 // app.post("/student", (req, res) => {
 //     const{name, branch, year} = req.body;
