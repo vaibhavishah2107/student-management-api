@@ -1,6 +1,6 @@
 const User = require("../models/user.js");
 const bcrypt = require("bcrypt");
-
+const jwt = require("jsonwebtoken");
 
 async function createUser(req, res){
     try{
@@ -20,41 +20,41 @@ async function createUser(req, res){
 async function loginUser(req, res) {
 
     try {
-
         // Step 1
         // Get email and password
         const {email,password} = req.body;
-
         // Step 2
         // Find user
         const user = await User.findOne({
             email
         })
-
         // Step 3
         // If user doesn't exist
         if(!user){
             return res.status(404).send("no user found");
         }
-
         // Step 4
         // Compare password
         const isMatch = await bcrypt.compare(
             password,
             user.password
         );
-
         // Step 5
         // If password is wrong
         if(!isMatch){
             return res.status(401).send("login fail");
         }
-
-        // Step 6
-        // Login successful
-        return res.status(200).json({
-            message: "login successfull"
-        });
+        //jwt creation
+        const token = jwt.sign(
+            {
+            id: user._id
+            },
+            "mySecretKey"
+        );
+         return res.status(200).json({
+            message: "Login successful",
+            token
+         });
 
     } catch (error) {
         console.log(error);

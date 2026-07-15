@@ -2,10 +2,10 @@ const express = require("express");
 const router = express.Router();
 
 const { createStudent,getStudentById,studentSearch,updateStudent,deleteStudent } = require("../controllers/studentController");
-
-router.post("/student", createStudent);
+const verifyToken = require("../middleware/authMiddleware");
+router.post("/student",verifyToken ,createStudent);
 router.get("/student/:id", getStudentById);
-router.get("/student/:id", studentSearch);
+router.get("/student/search", studentSearch);
 router.put("/student/:id", updateStudent);
 router.delete("/student/:id", deleteStudent);
 module.exports = router;
